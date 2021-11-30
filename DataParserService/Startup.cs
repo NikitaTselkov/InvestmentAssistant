@@ -1,4 +1,5 @@
 using DataParserService.Data;
+using DataParserService.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,9 @@ namespace DataParserService
                 options.UseSqlServer(Configuration.GetConnectionString("SQlDataParserConnection")));
 
             services.AddScoped<IDataParserRepository, DataParserRepository>();
-
+            services.AddSingleton<IMessageBusClient, MessageBusClient>();
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DataParserService", Version = "v1" });

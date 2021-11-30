@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataParserService.Models
 {
-    public class PriceIndex
+    public class Company
     {
         [Key]
         [Required]
@@ -16,6 +16,12 @@ namespace DataParserService.Models
         public string Name { get; set; }
 
         [Required]
-        public double index { get; set; }
+        public string Sector { get; set; }
+
+        [Required]
+        public int YearFoundation { get; set; }
+
+        [Required]
+        public ICollection<Multiplicator> Multiplicators { get; set; }
     }
 }

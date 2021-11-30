@@ -22,6 +22,8 @@ namespace DataParserService.Data
             try
             {
                 context.Database.Migrate();
+
+                Console.WriteLine($"--> Migrations were applied");
             }
             catch (Exception ex)
             {

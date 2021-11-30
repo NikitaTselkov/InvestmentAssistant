@@ -9,9 +9,14 @@ namespace DataParserService.Data
     public interface IDataParserRepository
     {
         bool SaveChanges();
-        IEnumerable<PriceIndex> GetAllPriceIndeces();
-        PriceIndex GetPriceIndexById(int id);
-        void AddPriceIndex(PriceIndex priceIndex);
-        void DeletePriceIndex(int id);
+
+        // Multiplicators.
+        void AddMultiplicatorForCompany(int companyId, Multiplicator multiplicator);
+        IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId);
+
+        // Companies.
+        IEnumerable<Company> GetAllCompanies();
+        Company GetCompanyById(int id);
+        void AddCompany(Company company);
     }
 }

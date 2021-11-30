@@ -14,6 +14,16 @@ namespace DataParserService.Data
         
         }
 
-        public DbSet<PriceIndex> PriceIndices { get; set; }
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Multiplicator> Multiplicators { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Multiplicator>()
+                .HasOne(c => c.Company)
+                .WithMany(c => c.Multiplicators)          
+                .HasForeignKey(c => c.CompanyId);
+        }
     }
 }

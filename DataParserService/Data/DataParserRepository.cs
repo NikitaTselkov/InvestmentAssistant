@@ -15,29 +15,39 @@ namespace DataParserService.Data
             _context = context;
         }
 
-        public void AddPriceIndex(PriceIndex priceIndex)
+        public void AddCompany(Company company)
         {
-            if (priceIndex == null) throw new ArgumentNullException(nameof(priceIndex));
-
-            _context.PriceIndices.Add(priceIndex);
+            if (company == null) throw new ArgumentNullException(nameof(company));
+            
+            _context.Companies.Add(company);
         }
 
-        public void DeletePriceIndex(int id)
+        public void AddMultiplicatorForCompany(int companyId, Multiplicator multiplicator)
         {
-            var priceIndex = GetPriceIndexById(id);
-            if (priceIndex == null) throw new ArgumentNullException(nameof(priceIndex), $"PriceIndex c Id = {id} не существует");
+            if (multiplicator == null) throw new ArgumentNullException(nameof(multiplicator));
 
-            _context.PriceIndices.Remove(priceIndex);
+            var company = _context.Companies.FirstOrDefault(f => f.Id == companyId);
+
+            multiplicator.CompanyId = companyId;
+
+            _context.Multiplicators.Add(multiplicator);
         }
 
-        public IEnumerable<PriceIndex> GetAllPriceIndeces()
+        public IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId)
         {
-            return _context.PriceIndices.ToList();
+            return _context.Multiplicators
+                .Where(w => w.CompanyId == companyId)
+                .OrderBy(o => o.Company.Name);
         }
 
-        public PriceIndex GetPriceIndexById(int id)
+        public IEnumerable<Company> GetAllCompanies()
         {
-            return _context.PriceIndices.FirstOrDefault(f => f.Id == id);
+            return _context.Companies.ToList();
+        }
+
+        public Company GetCompanyById(int id)
+        {
+            return _context.Companies.FirstOrDefault(f => f.Id == id);
         }
 
         public bool SaveChanges()

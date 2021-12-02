@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataParserService.Data;
+using DataParserService.DataBase;
 using DataParserService.Dtos;
 using DataParserService.Models;
 using DataParserService.RabbitMQ;
@@ -15,11 +15,11 @@ namespace DataParserService.Controllers
     [ApiController]
     public class MultiplicatorsController : ControllerBase
     {
-        private readonly IDataParserRepository _repository;
+        private readonly IRepository _repository;
         private readonly IMapper _mapper;
         private readonly IMessageBusClient _messageBusClient;
 
-        public MultiplicatorsController(IDataParserRepository repository, IMapper mapper, IMessageBusClient messageBusClient)
+        public MultiplicatorsController(IRepository repository, IMapper mapper, IMessageBusClient messageBusClient)
         {
             _repository = repository;
             _mapper = mapper;

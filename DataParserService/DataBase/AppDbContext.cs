@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataParserService.IssMoexApi.Models;
 
-namespace DataParserService.Data
+namespace DataParserService.DataBase
 {
     public class AppDbContext : DbContext
     {
@@ -16,6 +17,8 @@ namespace DataParserService.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Multiplicator> Multiplicators { get; set; }
+        public DbSet<SecuritieTQBR> SecuritiesTQBR { get; set; }
+        public DbSet<CapitalizationCompany> CapitalizationCompanies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

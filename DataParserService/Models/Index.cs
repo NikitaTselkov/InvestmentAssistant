@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataParserService.Models
 {
-    public class Multiplicator
+    [Table("Indexes")]
+    public class Index
     {
         [Key]
         [Required]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Key { get; set; }
 
         [Required]
-        public ICollection<Index> Indexes { get; set; }
+        public double Value { get; set; }
 
         [Required]
-        public int CompanyId { get; set; }
+        public int MultiplicatorId { get; set; }
 
-        public Company Company { get; set; }
+        public Multiplicator Multiplicator { get; set; }
     }
 }

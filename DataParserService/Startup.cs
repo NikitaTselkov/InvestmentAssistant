@@ -1,4 +1,5 @@
 using DataParserService.DataBase;
+using DataParserService.DataParser;
 using DataParserService.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,7 @@ namespace DataParserService
                 options.UseSqlServer(Configuration.GetConnectionString("SQlDataParserConnection")));
 
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IParser, Parser>();
             services.AddSingleton<IMessageBusClient, MessageBusClient>();
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

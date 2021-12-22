@@ -1,5 +1,4 @@
-﻿using DataParserService.IssMoexApi.Models;
-using DataParserService.Models;
+﻿using DataParserService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +23,6 @@ namespace DataParserService.DataBase
         void InitSecuritiesTQBR();
         IEnumerable<SecuritieTQBR> GetSecuritiesTQBR();
         bool IsSecuritiesTQBRContainsAny();
-
-        // Capitalization of companies.
-
-        void CalculateCapitalizations();
-        CapitalizationCompany GetCapitalization(SecuritieTQBR securitieTQBR);
-        void DeleteAllCapitalizations();
-        DateTime? GetLastUpdateCapitalizations();
-
-        Stock GetStockPrice(SecuritieTQBR securitieTQBR);
-      
+        bool IsSecuritieTQBRExists(string secId);
     }
 }

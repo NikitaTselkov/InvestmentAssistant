@@ -1,5 +1,4 @@
-﻿using DataParserService.IssMoexApi.Models;
-using DataParserService.Models;
+﻿using DataParserService.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -29,9 +28,11 @@ namespace DataParserService.DataBase
         public void AddCompany(Company company)
         {
             if (company == null) throw new ArgumentNullException(nameof(company));
-            
+
             _context.Companies.Add(company);
             _context.SaveChanges();
+
+            Console.WriteLine($"--> Added company: {company.Name}");
         }
 
         public IEnumerable<Company> GetAllCompanies()
@@ -73,7 +74,7 @@ namespace DataParserService.DataBase
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json?iss.meta=off&iss.only=securities&securities.columns=SECID,SHORTNAME,SECNAME,SECTYPE");
+                client.BaseAddress = new Uri("https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json?iss.meta=off&iss.only=securities&securities.columns=SECID,SECTYPE");
                 client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -87,9 +88,7 @@ namespace DataParserService.DataBase
                         _context.SecuritiesTQBR.Add(new SecuritieTQBR()
                         {
                             SECID = token[0].ToString(),
-                            SHORTNAME = token[1].ToString(),
-                            SECNAME = token[2].ToString(),
-                            SECTYPE = token[3].ToString()
+                            SECTYPE = token[1].ToString()
                         });
                     }
 
@@ -111,103 +110,9 @@ namespace DataParserService.DataBase
             return _context.SecuritiesTQBR.Any();
         }
 
-        #endregion
-
-        #region Capitalization of company.
-
-        public void CalculateCapitalizations()
+        public bool IsSecuritieTQBRExists(string secId)
         {
-            CapitalizationCompany capitalizationCompany = null;
-            Stock stock = null;
-            int lastIndex = 0;
-            var securities = GetSecuritiesTQBR().OrderBy(o => o.SECID).ToList();
-            
-            for (int i = 0; i < securities.Count; i++)
-            {
-                try
-                {
-                    stock = GetStockPrice(securities[i]);
-                    capitalizationCompany = new CapitalizationCompany()
-                    {
-                        SECID = stock.SECID,
-                        CAPITALIZATION = stock.ISSUESIZE * stock.PRICE,
-                        DATA = stock.PREVDATE
-                    };
-
-                    if (i + 1 < securities.Count)
-                    {
-                        lastIndex = securities[i + 1].SECID.Length - 1;
-
-                        if (securities[i].SECID == securities[i + 1].SECID.Remove(lastIndex))
-                        {
-                            stock = GetStockPrice(securities[i + 1]);
-                            capitalizationCompany.CAPITALIZATION += stock.ISSUESIZE * stock.PRICE;
-                        }
-                    }
-
-                    _context.CapitalizationCompanies.Add(capitalizationCompany);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"--> {e.Message}");
-                }
-            }
-
-            _context.SaveChanges();
-        }
-
-        public CapitalizationCompany GetCapitalization(SecuritieTQBR securitieTQBR)
-        {
-            return _context.CapitalizationCompanies.FirstOrDefault(f => f.SECID == securitieTQBR.SECID);
-        }
-
-        public DateTime? GetLastUpdateCapitalizations()
-        {
-            return _context.CapitalizationCompanies.FirstOrDefault()?.DATA;
-        }
-
-        public void DeleteAllCapitalizations()
-        {
-            _context.CapitalizationCompanies = null;
-            _context.SaveChanges();
-        }
-
-        public Stock GetStockPrice(SecuritieTQBR securitieTQBR)
-        {
-            if (securitieTQBR.SECTYPE == "1" || securitieTQBR.SECTYPE == "2")
-            {
-                using (var client = new HttpClient())
-                {
-                    client.BaseAddress = new Uri($"https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/{securitieTQBR.SECID}.json?iss.meta=off&iss.only=securities&securities.columns=SECID,ISSUESIZE,PREVPRICE,PREVDATE");
-                    client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage response = client.GetAsync(client.BaseAddress).Result;
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var tokens = response.Content.ReadAsAsync<JToken>().Result;
-                        var token = tokens["securities"]["data"];
-
-                        var secId = token[0][0].ToString();
-
-                        return new Stock
-                        (
-                            secId: token[0][0].ToString(),
-                            issueSize: (long)token[0][1],
-                            price: (double)token[0][2],
-                            prevDate: (DateTime)token[0][3]
-                        );
-                    }
-                    else
-                    {
-                        throw new Exception($"{(int)response.StatusCode} ({response.ReasonPhrase})");
-                    }
-                }
-            }
-            else
-            {
-                throw new Exception($"{securitieTQBR.SECID} --> Stock SECTYPE: {securitieTQBR.SECTYPE} is not supported");
-            }
+            return _context.SecuritiesTQBR.Any(a => a.SECID == secId);
         }
 
         #endregion

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DataParserService.DataParser;
+using DataParserService.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -8,7 +10,7 @@ namespace DataParserService.DataBase
 {
     public static class PrepDb
     {
-        private static IRepository repository;
+        private static IRepository _repository;
 
         public static void InitDataBase(IApplicationBuilder app)
         {
@@ -17,38 +19,27 @@ namespace DataParserService.DataBase
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 appDbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
-                repository = new Repository(appDbContext);
+                _repository = new Repository(appDbContext);
 
                 ApplyMigrate(appDbContext);
-
                 InitSecurities();
-
-                CalculateData();
+                InitCompanies();
             }
         }
 
-        private static void CalculateData()
+        private static void InitCompanies()
         {
-            var lastUpdate = repository.GetLastUpdateCapitalizations();
-
-            if (lastUpdate != null && lastUpdate.Value.Day > DateTime.Now.Day)
+            foreach (var securitieTQBR in _repository.GetSecuritiesTQBR())
             {
-                repository.DeleteAllCapitalizations();
-                repository.CalculateCapitalizations();
-                Console.WriteLine("--> Updated capitalizations");
-            }
-            else
-            {
-                repository.CalculateCapitalizations();
-                Console.WriteLine("--> Calculated capitalizations");
+                _repository.AddCompany(new Company(securitieTQBR));
             }
         }
 
         private static void InitSecurities()
         {
-            if (!repository.IsSecuritiesTQBRContainsAny())
+            if (!_repository.IsSecuritiesTQBRContainsAny())
             {
-                repository.InitSecuritiesTQBR();
+                _repository.InitSecuritiesTQBR();
                 Console.WriteLine("--> Initialized Securities TQBR");
             }
             else

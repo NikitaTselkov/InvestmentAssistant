@@ -42,6 +42,8 @@ namespace DataParserService.DataBase
                     Console.WriteLine($"--> Company {_repository.GetCompanyBySecId(securitieTQBR.SECID).Name} already exists");
                 }
             }
+
+            Console.WriteLine("--> Initialized Companies");
         }
 
         private static void InitSecurities()

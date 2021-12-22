@@ -3,6 +3,7 @@ using DataParserService.Models;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DataParserService.DataParser
@@ -55,15 +56,24 @@ namespace DataParserService.DataParser
 
         public List<Multiplicator> ParseCompanyAllMultiplicators(Company company)
         {
-            return new List<Multiplicator>
+            var multiplicators = new List<Multiplicator>();
+
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_E));
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_B));
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_S));
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_BV));
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.EV_EBITDA));
+            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.DEBT_EBITDA));
+
+            return multiplicators;
+
+            void AddToMultiplicators(Multiplicator multiplicator)
             {
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_E),
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_B),
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_S),
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_BV),
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.EV_EBITDA),
-                ParseCompanyMultiplicator(company, MultiplicatorsCodes.DEBT_EBITDA)
-            };
+                if (multiplicator != null)
+                {
+                    multiplicators.Add(multiplicator);
+                }
+            }
         }
 
         public Multiplicator ParseCompanyMultiplicator(Company company, string multiplicatorName)
@@ -109,7 +119,7 @@ namespace DataParserService.DataParser
                 Console.WriteLine($"--> ParseCompanyMultiplicator Error: {ex.Message}");
             }
 
-            return multiplicator;
+            return multiplicator.Indexes.Any(a => a != null) ? multiplicator : null;
         }
     }
 }

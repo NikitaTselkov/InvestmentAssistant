@@ -58,6 +58,7 @@ namespace DataParserService.DataParser
             return new List<Multiplicator>
             {
                 ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_E),
+                ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_B),
                 ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_S),
                 ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_BV),
                 ParseCompanyMultiplicator(company, MultiplicatorsCodes.EV_EBITDA),
@@ -69,10 +70,6 @@ namespace DataParserService.DataParser
         {
             var multiplicator = new Multiplicator { Name = multiplicatorName, CompanyId = company.Id };
             multiplicator.Indexes = new List<Models.Index>();
-            //var index = new Models.Index
-            //{
-            //    //Multiplicator = multiplicator
-            //};
 
             try
             {
@@ -111,8 +108,6 @@ namespace DataParserService.DataParser
             {
                 Console.WriteLine($"--> ParseCompanyMultiplicator Error: {ex.Message}");
             }
-
-            
 
             return multiplicator;
         }

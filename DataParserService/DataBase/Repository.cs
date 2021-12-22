@@ -35,14 +35,19 @@ namespace DataParserService.DataBase
             Console.WriteLine($"--> Added company: {company.Name}");
         }
 
+        public bool IsCompanyExists(SecuritieTQBR securitieTQBR)
+        {
+            return _context.Companies.FirstOrDefault(f => f.SecuritieTQBR == securitieTQBR) != null;
+        }
+
         public IEnumerable<Company> GetAllCompanies()
         {
             return _context.Companies.ToList();
         }
 
-        public Company GetCompanyById(int id)
+        public Company GetCompanyBySecId(string secId)
         {
-            return _context.Companies.FirstOrDefault(f => f.Id == id);
+            return _context.Companies.FirstOrDefault(f => f.SecuritieTQBR.SECID == secId);
         }
 
         #endregion
@@ -72,6 +77,8 @@ namespace DataParserService.DataBase
         #region Securitie TQBR
         public void InitSecuritiesTQBR()
         {
+            _context.SecuritiesTQBR.RemoveRange(_context.SecuritiesTQBR);
+
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.json?iss.meta=off&iss.only=securities&securities.columns=SECID,SECTYPE");
@@ -88,8 +95,9 @@ namespace DataParserService.DataBase
                         _context.SecuritiesTQBR.Add(new SecuritieTQBR()
                         {
                             SECID = token[0].ToString(),
-                            SECTYPE = token[1].ToString()
-                        });
+                            SECTYPE = token[1].ToString(),
+                            LastUpdate = DateTime.Now
+                        });;
                     }
 
                     _context.SaveChanges();
@@ -105,9 +113,9 @@ namespace DataParserService.DataBase
             return _context.SecuritiesTQBR.ToList();
         }
 
-        public bool IsSecuritiesTQBRContainsAny()
+        public bool IsUpdateSecuritiesTQBR()
         {
-            return _context.SecuritiesTQBR.Any();
+            return !_context.SecuritiesTQBR.Any() || _context.SecuritiesTQBR?.OrderBy(o => o).FirstOrDefault()?.LastUpdate.Day == DateTime.Now.Day - 7; // Обновляет раз в неделю.
         }
 
         public bool IsSecuritieTQBRExists(string secId)

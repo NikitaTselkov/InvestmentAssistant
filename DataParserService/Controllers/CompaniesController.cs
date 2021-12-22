@@ -40,7 +40,7 @@ namespace DataParserService.Controllers
         {
             Console.WriteLine("--> Getting Company by Id...");
 
-            var companyItem = _repository.GetCompanyById(id);
+            Company companyItem = null; //_repository.GetCompanyById(id);
 
             if (companyItem == null) return NotFound();       
 

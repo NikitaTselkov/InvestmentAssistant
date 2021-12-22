@@ -22,6 +22,9 @@ namespace DataParserService.Models
         [JsonProperty]
         public string SECTYPE { get; set; }
 
+        [Required]
+        public DateTime LastUpdate { get; set; }
+
         public Company Company { get; set; }
     }
 }

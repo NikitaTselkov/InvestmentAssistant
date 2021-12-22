@@ -16,13 +16,14 @@ namespace DataParserService.DataBase
 
         // Companies.
         IEnumerable<Company> GetAllCompanies();
-        Company GetCompanyById(int id);
+        Company GetCompanyBySecId(string secId);
         void AddCompany(Company company);
+        bool IsCompanyExists(SecuritieTQBR securitieTQBR);
 
         // Securities TQBR.
         void InitSecuritiesTQBR();
         IEnumerable<SecuritieTQBR> GetSecuritiesTQBR();
-        bool IsSecuritiesTQBRContainsAny();
+        bool IsUpdateSecuritiesTQBR();
         bool IsSecuritieTQBRExists(string secId);
     }
 }

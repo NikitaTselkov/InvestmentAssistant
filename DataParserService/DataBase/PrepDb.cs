@@ -29,15 +29,24 @@ namespace DataParserService.DataBase
 
         private static void InitCompanies()
         {
-            foreach (var securitieTQBR in _repository.GetSecuritiesTQBR())
+            var securitieTQBRCode = ((int)SecuritiesTQBR.Stock).ToString();
+
+            foreach (var securitieTQBR in _repository.GetSecuritiesTQBR().Where(w => w.SECTYPE == securitieTQBRCode))
             {
-                _repository.AddCompany(new Company(securitieTQBR));
+                if (!_repository.IsCompanyExists(securitieTQBR))
+                {
+                    _repository.AddCompany(new Company(securitieTQBR));
+                }
+                else
+                {
+                    Console.WriteLine($"--> Company {_repository.GetCompanyBySecId(securitieTQBR.SECID).Name} already exists");
+                }
             }
         }
 
         private static void InitSecurities()
         {
-            if (!_repository.IsSecuritiesTQBRContainsAny())
+            if (_repository.IsUpdateSecuritiesTQBR())
             {
                 _repository.InitSecuritiesTQBR();
                 Console.WriteLine("--> Initialized Securities TQBR");

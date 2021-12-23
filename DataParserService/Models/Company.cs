@@ -31,19 +31,24 @@ namespace DataParserService.Models
 
         public SecuritieTQBR SecuritieTQBR { get; set; }
 
+        private IParser _parser = new Parser();
+
         public Company() { }
 
         public Company(SecuritieTQBR securitieTQBR)
         {
-            IParser parser = new Parser();
+            var (sectorLongName, sectorShortName) = _parser.ParseCompanySector(securitieTQBR);
 
-            var (sectorLongName, sectorShortName) = parser.ParseCompanySector(securitieTQBR);
-
-            Name = parser.ParseCompanyName(securitieTQBR);
+            Name = _parser.ParseCompanyName(securitieTQBR);
             SecuritieTQBR = securitieTQBR;
             SectorLongName = sectorLongName;
             SectorShortName = sectorShortName;
-            Multiplicators = parser.ParseCompanyAllMultiplicators(this);
+            Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
+        }
+
+        public void UpdateMultiplicators()
+        {
+            Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
         }
     }
 }

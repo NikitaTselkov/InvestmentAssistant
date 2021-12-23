@@ -1,4 +1,5 @@
-﻿using DataParserService.Models;
+﻿using DataParserService.DataParser;
+using DataParserService.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace DataParserService.DataBase
     public class Repository : IRepository
     {
         private readonly AppDbContext _context;
+        private readonly IParser _parser;
 
         public Repository(AppDbContext context)
         {
             _context = context;
+            _parser = new Parser();
         }
 
         public bool SaveChanges()
@@ -50,6 +53,11 @@ namespace DataParserService.DataBase
             return _context.Companies.FirstOrDefault(f => f.SecuritieTQBR.SECID == secId);
         }
 
+        public Company GetCompanyById(int id)
+        {
+           return _context.Companies.FirstOrDefault(f => f.Id == id);
+        }
+
         #endregion
 
         #region Multiplicator
@@ -63,6 +71,33 @@ namespace DataParserService.DataBase
 
             _context.Multiplicators.Add(multiplicator);
             _context.SaveChanges();
+        }
+
+        public void RemoveMultiplicatorsForCompany(int companyId)
+        {
+            foreach (var multiplicator in _context.Multiplicators.Where(w => w.CompanyId == companyId).ToList())
+            {
+                foreach (var index in _context.Indexes.Where(w => w.MultiplicatorId == multiplicator.Id).ToList())
+                {
+                    _context.Indexes.Remove(index);
+                }
+
+                _context.Multiplicators.Remove(multiplicator);
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UpdateMultiplicatorsForCompany(int companyId)
+        {
+            var company = GetCompanyById(companyId);
+            company.SecuritieTQBR = GetSecuritieTQBRById(company.SecuritieTQBRId);
+            RemoveMultiplicatorsForCompany(companyId);
+
+            foreach (var multiplicator in _parser.ParseCompanyAllMultiplicators(company))
+            {
+                AddMultiplicatorForCompany(companyId, multiplicator);
+            }
         }
 
         public IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId)
@@ -111,6 +146,11 @@ namespace DataParserService.DataBase
         public IEnumerable<SecuritieTQBR> GetSecuritiesTQBR()
         {
             return _context.SecuritiesTQBR.ToList();
+        }
+
+        public SecuritieTQBR GetSecuritieTQBRById(int id)
+        {
+            return _context.SecuritiesTQBR.FirstOrDefault(f => f.Id == id);
         }
 
         public bool IsUpdateSecuritiesTQBR()

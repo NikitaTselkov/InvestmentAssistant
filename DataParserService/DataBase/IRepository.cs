@@ -12,17 +12,21 @@ namespace DataParserService.DataBase
 
         // Multiplicators.
         void AddMultiplicatorForCompany(int companyId, Multiplicator multiplicator);
+        void RemoveMultiplicatorsForCompany(int companyId);
         IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId);
+        void UpdateMultiplicatorsForCompany(int companyId);
 
         // Companies.
         IEnumerable<Company> GetAllCompanies();
         Company GetCompanyBySecId(string secId);
+        Company GetCompanyById(int id);
         void AddCompany(Company company);
         bool IsCompanyExists(SecuritieTQBR securitieTQBR);
 
         // Securities TQBR.
         void InitSecuritiesTQBR();
         IEnumerable<SecuritieTQBR> GetSecuritiesTQBR();
+        SecuritieTQBR GetSecuritieTQBRById(int id);
         bool IsUpdateSecuritiesTQBR();
         bool IsSecuritieTQBRExists(string secId);
     }

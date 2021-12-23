@@ -39,6 +39,16 @@ namespace DataParserService.Controllers
             return CreatedAtRoute(nameof(GetMultiplicatorsForCompany), new { companyId = companyId }, multiplicators);
         }
 
+        [HttpPost("Update/{companyId}", Name = "UpdateMultiplicatorsForCompany")]
+        public void UpdateMultiplicatorsForCompany(int companyId)
+        {
+            Console.WriteLine($"--> Hit UpdateMultiplicatorsForCompany: {companyId}");
+
+            _repository.UpdateMultiplicatorsForCompany(companyId);
+
+            Console.WriteLine($"--> Updated Multiplicators For Company: {companyId}");
+        }
+
         [HttpGet("{companyId}", Name = "GetMultiplicatorsForCompany")]
         public ActionResult<List<MultiplicatorReadDto>> GetMultiplicatorsForCompany(int companyId)
         {

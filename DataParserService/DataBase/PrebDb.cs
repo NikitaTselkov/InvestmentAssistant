@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace DataParserService.DataBase
 {
-    public static class PrepDb
+    public static class PrebDb
     {
         private static IRepository _repository;
 
@@ -27,7 +27,6 @@ namespace DataParserService.DataBase
                 InitCompanies();
             }
         }
-
         private static void InitCompanies()
         {
             foreach (var securitieTQBR in _repository.GetSecuritiesTQBR().Where(w => w.SECTYPE == SecuritiesTQBRCodes.Stock))

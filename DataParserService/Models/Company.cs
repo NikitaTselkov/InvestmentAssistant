@@ -45,10 +45,5 @@ namespace DataParserService.Models
             SectorShortName = sectorShortName;
             Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
         }
-
-        public void UpdateMultiplicators()
-        {
-            Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
-        }
     }
 }

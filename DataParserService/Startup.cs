@@ -61,7 +61,7 @@ namespace DataParserService
                 endpoints.MapControllers();
             });
 
-            PrepDb.InitDataBase(app);
+            PrebDb.InitDataBase(app);
         }
     }
 }

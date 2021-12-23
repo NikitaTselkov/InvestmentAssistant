@@ -1,4 +1,5 @@
-﻿using DataParserService.DataParser;
+﻿using DataParserService.Codes;
+using DataParserService.DataParser;
 using DataParserService.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,7 @@ namespace DataParserService.DataBase
 
         private static void InitCompanies()
         {
-            var securitieTQBRCode = ((int)SecuritiesTQBR.Stock).ToString();
-
-            foreach (var securitieTQBR in _repository.GetSecuritiesTQBR().Where(w => w.SECTYPE == securitieTQBRCode))
+            foreach (var securitieTQBR in _repository.GetSecuritiesTQBR().Where(w => w.SECTYPE == SecuritiesTQBRCodes.Stock))
             {
                 if (!_repository.IsCompanyExists(securitieTQBR))
                 {

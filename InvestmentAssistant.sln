@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParserService", "DataParserService\DataParserService.csproj", "{E4EBEE37-90FD-47A2-9768-12F3E7AF039B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataParserService", "DataParserService\DataParserService.csproj", "{E4EBEE37-90FD-47A2-9768-12F3E7AF039B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K8S", "K8S\K8S.csproj", "{975433DB-36F0-4C6F-83D3-7E9982C5486C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "K8S", "K8S\K8S.csproj", "{975433DB-36F0-4C6F-83D3-7E9982C5486C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssessmentInvestmentAttractivenessService", "AssessmentInvestmentAttractivenessService\AssessmentInvestmentAttractivenessService.csproj", "{2284A4C4-511E-4FB9-A5B8-A7F87D99DA31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{975433DB-36F0-4C6F-83D3-7E9982C5486C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{975433DB-36F0-4C6F-83D3-7E9982C5486C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{975433DB-36F0-4C6F-83D3-7E9982C5486C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2284A4C4-511E-4FB9-A5B8-A7F87D99DA31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2284A4C4-511E-4FB9-A5B8-A7F87D99DA31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2284A4C4-511E-4FB9-A5B8-A7F87D99DA31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2284A4C4-511E-4FB9-A5B8-A7F87D99DA31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

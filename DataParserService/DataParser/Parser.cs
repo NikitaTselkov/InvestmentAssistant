@@ -58,12 +58,15 @@ namespace DataParserService.DataParser
         {
             var multiplicators = new List<Multiplicator>();
 
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_E));
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_B));
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_S));
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_BV));
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.EV_EBITDA));
-            AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.DEBT_EBITDA));
+            if (company != null)
+            {
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_E));
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_B));
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_S));
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.P_BV));
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.EV_EBITDA));
+                AddToMultiplicators(ParseCompanyMultiplicator(company, MultiplicatorsCodes.DEBT_EBITDA));
+            }
 
             return multiplicators;
 

@@ -30,9 +30,18 @@ namespace DataParserService.Controllers
         {
             Console.WriteLine("--> Getting Companies...");
 
-            var companyItem = _repository.GetAllCompanies();
+            var companies = _repository.GetAllCompanies();
+            var companiesReadDto = new List<CompanyReadDto>();
+            var companyReadDto = new CompanyReadDto();
 
-            return Ok(_mapper.Map<IEnumerable<CompanyReadDto>>(companyItem));
+            foreach (var company in companies)
+            {
+                companyReadDto = _mapper.Map<CompanyReadDto>(company);
+                companyReadDto.SecId = _repository.GetSecuritieTQBRById(company.SecuritieTQBRId).SECID;
+                companiesReadDto.Add(companyReadDto);
+            }
+
+            return Ok(companiesReadDto);
         }
 
         [HttpGet("{id}", Name = "GetCompanyById")]
@@ -40,11 +49,14 @@ namespace DataParserService.Controllers
         {
             Console.WriteLine("--> Getting Company by Id...");
 
-            Company companyItem = null; //_repository.GetCompanyById(id);
+            Company companyItem = _repository.GetCompanyById(id);
 
             if (companyItem == null) return NotFound();       
 
-            return Ok(_mapper.Map<CompanyReadDto>(companyItem));
+            var companyReadDto = _mapper.Map<CompanyReadDto>(companyItem);
+            companyReadDto.SecId = companyItem.SecuritieTQBR.SECID;
+
+            return Ok(companyReadDto);
         }
 
         [HttpPost]
@@ -52,12 +64,16 @@ namespace DataParserService.Controllers
         {
             Console.WriteLine("--> Addeting Company...");
 
-            var companyModel = _mapper.Map<Company>(companyCreateDto);
-            _repository.AddCompany(companyModel);
-            _repository.SaveChanges();
+            if (companyCreateDto == null || !_repository.GetSecuritiesTQBR().Any(a => a.SECID == companyCreateDto.SecId)) return NotFound();
 
-            var companyReadDto = _mapper.Map<CompanyReadDto>(companyModel);
+            var company = new Company(_repository.GetSecuritieTQBRBySecId(companyCreateDto.SecId));
+            var companyReadDto = _mapper.Map<CompanyReadDto>(company);
+            company.SecuritieTQBRId = company.SecuritieTQBR.Id;
+            companyReadDto.SecId = company.SecuritieTQBR.SECID;
 
+            _repository.AddCompany(company);
+
+            companyReadDto.Id = company.Id;
             try
             {
                 var companyPublishedDto = _mapper.Map<CompanyPublishedDto>(companyReadDto);

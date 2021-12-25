@@ -14,7 +14,7 @@ namespace DataParserService.DataBase
         void AddMultiplicatorForCompany(int companyId, Multiplicator multiplicator);
         void RemoveMultiplicatorsForCompany(int companyId);
         IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId);
-        void UpdateMultiplicatorsForCompany(int companyId);
+        IEnumerable<Multiplicator> UpdateMultiplicatorsForCompany(int companyId);
 
         // Companies.
         IEnumerable<Company> GetAllCompanies();
@@ -27,6 +27,7 @@ namespace DataParserService.DataBase
         void InitSecuritiesTQBR();
         IEnumerable<SecuritieTQBR> GetSecuritiesTQBR();
         SecuritieTQBR GetSecuritieTQBRById(int id);
+        SecuritieTQBR GetSecuritieTQBRBySecId(string secId);
         bool IsUpdateSecuritiesTQBR();
         bool IsSecuritieTQBRExists(string secId);
     }

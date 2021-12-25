@@ -8,7 +8,8 @@ namespace DataParserService.Dtos
     public class MultiplicatorPublishedDto : AbstractPublisedhDto
     {
         public string Name { get; set; }
-        public double Index { get; set; }
+        public ICollection<string> IndexKey { get; set; }
+        public ICollection<double> IndexValue { get; set; }
         public int CompanyId { get; set; }
     }
 }

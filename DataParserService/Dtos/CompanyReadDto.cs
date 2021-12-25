@@ -10,7 +10,8 @@ namespace DataParserService.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Sector { get; set; }
-        public int YearFoundation { get; set; }
+        public string SectorLongName { get; set; }
+        public string SectorShortName { get; set; }
+        public string SecId { get; set; }
     }
 }

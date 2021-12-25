@@ -30,6 +30,18 @@ namespace DataParserService.Controllers
         public ActionResult<List<MultiplicatorReadDto>> AddMultiplicatorForCompany(int companyId, MultiplicatorCreateDto multiplicator)
         {
             var multiplicatorModel = _mapper.Map<Multiplicator>(multiplicator);
+            multiplicatorModel.Name = multiplicator.Name;
+            multiplicatorModel.Indexes = new List<Models.Index>();
+
+            for (int i = 0; i < multiplicator.IndexKey.Count; i++)
+            {
+                multiplicatorModel.Indexes.Add(new Models.Index()
+                {
+                    Key = multiplicator.IndexKey.ToList()[i],
+                    Value = multiplicator.IndexValue.ToList()[i],
+                    MultiplicatorId = multiplicatorModel.Id
+                });
+            }
 
             _repository.AddMultiplicatorForCompany(companyId, multiplicatorModel);
             _repository.SaveChanges();
@@ -40,13 +52,22 @@ namespace DataParserService.Controllers
         }
 
         [HttpPost("Update/{companyId}", Name = "UpdateMultiplicatorsForCompany")]
-        public void UpdateMultiplicatorsForCompany(int companyId)
+        public ActionResult<List<MultiplicatorReadDto>> UpdateMultiplicatorsForCompany(int companyId)
         {
             Console.WriteLine($"--> Hit UpdateMultiplicatorsForCompany: {companyId}");
 
-            _repository.UpdateMultiplicatorsForCompany(companyId);
+            var multiplicators = _mapper.Map<List<MultiplicatorReadDto>>(_repository.UpdateMultiplicatorsForCompany(companyId));
 
-            Console.WriteLine($"--> Updated Multiplicators For Company: {companyId}");
+            if (multiplicators.Count > 0)
+            {
+                Console.WriteLine($"--> Updated Multiplicators For Company: {companyId}");
+            }
+            else
+            {
+                Console.WriteLine($"--> Couldn't Update Multiplicators For Company: {companyId}");
+            }
+
+            return CreatedAtRoute(nameof(GetMultiplicatorsForCompany), new { companyId = companyId }, multiplicators);
         }
 
         [HttpGet("{companyId}", Name = "GetMultiplicatorsForCompany")]
@@ -61,7 +82,9 @@ namespace DataParserService.Controllers
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<List<MultiplicatorReadDto>>(multiplicators));
+            var multiplicatorsReadDto = _mapper.Map<List<MultiplicatorReadDto>>(multiplicators);
+
+            return Ok(multiplicatorsReadDto);
         }
 
     }

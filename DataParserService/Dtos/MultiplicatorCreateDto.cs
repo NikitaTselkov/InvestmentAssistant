@@ -13,6 +13,9 @@ namespace DataParserService.Dtos
         public string Name { get; set; }
 
         [Required]
-        public double Index { get; set; }
+        public ICollection<string> IndexKey { get; set; }
+
+        [Required]
+        public ICollection<double> IndexValue { get; set; }
     }
 }

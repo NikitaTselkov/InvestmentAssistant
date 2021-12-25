@@ -10,7 +10,8 @@ namespace DataParserService.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Index { get; set; }
+        public ICollection<string> IndexKey { get; set; }
+        public ICollection<double> IndexValue { get; set; }
         public int CompanyId { get; set; }
     }
 }

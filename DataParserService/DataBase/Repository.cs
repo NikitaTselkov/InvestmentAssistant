@@ -30,12 +30,17 @@ namespace DataParserService.DataBase
 
         public void AddCompany(Company company)
         {
-            if (company == null) throw new ArgumentNullException(nameof(company));
+            if (company != null)
+            {
+                _context.Companies.Add(company);
+                _context.SaveChanges();
 
-            _context.Companies.Add(company);
-            _context.SaveChanges();
-
-            Console.WriteLine($"--> Added company: {company.Name}");
+                Console.WriteLine($"--> Added company: {company.Name}");
+            }
+            else
+            {
+                Console.WriteLine($"--> Couldn't add company: {company.Name}");
+            }
         }
 
         public bool IsCompanyExists(SecuritieTQBR securitieTQBR)
@@ -50,12 +55,34 @@ namespace DataParserService.DataBase
 
         public Company GetCompanyBySecId(string secId)
         {
-            return _context.Companies.FirstOrDefault(f => f.SecuritieTQBR.SECID == secId);
+            var company = _context.Companies.FirstOrDefault(f => f.SecuritieTQBR.SECID == secId);
+
+            if (company != null)
+            {
+                company.SecuritieTQBR = GetSecuritieTQBRById(company.SecuritieTQBRId);
+            }
+            else
+            {
+                Console.WriteLine($"--> Couldn't find company by SecId: {secId}");
+            }
+
+            return company;
         }
 
         public Company GetCompanyById(int id)
         {
-           return _context.Companies.FirstOrDefault(f => f.Id == id);
+            var company = _context.Companies.FirstOrDefault(f => f.Id == id);
+
+            if (company != null)
+            {
+                company.SecuritieTQBR = GetSecuritieTQBRById(company.SecuritieTQBRId);
+            }
+            else
+            {
+                Console.WriteLine($"--> Couldn't find company by Id: {id}");
+            }
+
+            return company;
         }
 
         #endregion
@@ -69,6 +96,7 @@ namespace DataParserService.DataBase
             var company = _context.Companies.FirstOrDefault(f => f.Id == companyId);
             multiplicator.CompanyId = companyId;
 
+            _context.Indexes.AddRange(multiplicator.Indexes);
             _context.Multiplicators.Add(multiplicator);
             _context.SaveChanges();
         }
@@ -88,23 +116,34 @@ namespace DataParserService.DataBase
             _context.SaveChanges();
         }
 
-        public void UpdateMultiplicatorsForCompany(int companyId)
+        public IEnumerable<Multiplicator> UpdateMultiplicatorsForCompany(int companyId)
         {
-            var company = GetCompanyById(companyId);
-            company.SecuritieTQBR = GetSecuritieTQBRById(company.SecuritieTQBRId);
+            var multiplicators = new List<Multiplicator>();
+
             RemoveMultiplicatorsForCompany(companyId);
 
-            foreach (var multiplicator in _parser.ParseCompanyAllMultiplicators(company))
+            foreach (var multiplicator in _parser.ParseCompanyAllMultiplicators(GetCompanyById(companyId)))
             {
                 AddMultiplicatorForCompany(companyId, multiplicator);
+
+                multiplicators.Add(multiplicator);
             }
+
+            return multiplicators;
         }
 
         public IEnumerable<Multiplicator> GetMultiplicatorsForCompany(int companyId)
         {
-            return _context.Multiplicators
+            var multiplicators = _context.Multiplicators
                 .Where(w => w.CompanyId == companyId)
                 .OrderBy(o => o.Company.Name);
+
+            foreach (var multiplicator in multiplicators.ToList())
+            {
+                multiplicator.Indexes = _context.Indexes.Where(w => w.MultiplicatorId == multiplicator.Id).ToList();
+            }
+
+            return multiplicators;
         }
 
         #endregion
@@ -151,6 +190,11 @@ namespace DataParserService.DataBase
         public SecuritieTQBR GetSecuritieTQBRById(int id)
         {
             return _context.SecuritiesTQBR.FirstOrDefault(f => f.Id == id);
+        }
+
+        public SecuritieTQBR GetSecuritieTQBRBySecId(string secId)
+        {
+            return _context.SecuritiesTQBR.FirstOrDefault(f => f.SECID == secId);
         }
 
         public bool IsUpdateSecuritiesTQBR()

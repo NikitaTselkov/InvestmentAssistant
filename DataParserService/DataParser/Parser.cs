@@ -107,7 +107,7 @@ namespace DataParserService.DataParser
 
                         index.Key = timePeriod;
 
-                        if (double.TryParse(Regex.Match(node, @"(?:-)[0-9]{1,3}(?:[.,][0-9]{1,3})?").Value.Replace('.', ','), out double result)) // Находит число с плавающей запятой.
+                        if (double.TryParse(Regex.Match(node, @"-?[0-9]{1,3}(?:[.,][0-9]{1,3})?").Value.Replace('.', ','), out double result)) // Находит число с плавающей запятой.
                         {
                             index.Value = result;
                         }

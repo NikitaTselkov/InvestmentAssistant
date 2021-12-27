@@ -10,16 +10,16 @@ namespace DataParserService.DataParser
 {
     public class Parser : IParser
     {
-        public string ParseCompanyName(SecuritieTQBR securitieTQBR)
+        public string ParseCompanyName(string secId)
         {
             string name = string.Empty;
 
             try
             {
-                if (securitieTQBR == null) throw new ArgumentNullException(nameof(securitieTQBR));
+                if (string.IsNullOrWhiteSpace(secId)) throw new ArgumentNullException(nameof(secId));
 
                 var web = new HtmlWeb();
-                var doc = web.Load($"https://finrange.com/ru/company/MOEX/{securitieTQBR.SECID}");
+                var doc = web.Load($"https://finrange.com/ru/company/MOEX/{secId}");
 
                 name = doc.DocumentNode.SelectSingleNode($"//div[@class='company-brief__title']/h1").InnerText.ToString();
             }
@@ -31,27 +31,49 @@ namespace DataParserService.DataParser
             return name;
         }
 
-        public (string sectorLongName, string sectorShortName) ParseCompanySector(SecuritieTQBR securitieTQBR)
+        public string ParseCompanyCountry(string secId)
         {
-            string sectorLongName = string.Empty;
-            string sectorShortName = string.Empty;
+            string country = string.Empty;
 
             try
             {
-                if (securitieTQBR == null) throw new ArgumentNullException(nameof(securitieTQBR));
+                if (string.IsNullOrWhiteSpace(secId)) throw new ArgumentNullException(nameof(secId));
 
                 var web = new HtmlWeb();
-                var doc = web.Load($"https://finrange.com/ru/company/MOEX/{securitieTQBR.SECID}");
+                var doc = web.Load($"https://finrange.com/ru/company/MOEX?search={secId}");
 
-                sectorLongName = doc.DocumentNode.SelectSingleNode($"/html/body/div[1]/div[1]/section/div/div[1]/div[1]/div/div[1]/div[2]/div[1]/span[1]").InnerText.ToString();
-                sectorShortName = doc.DocumentNode.SelectSingleNode($"/html/body/div[1]/div[1]/section/div/div[1]/div[1]/div/div[1]/div[2]/div[1]/span[2]").InnerText.ToString(); 
+                country = doc.DocumentNode.SelectSingleNode($"//div[@class='content-wrapper']/div/div[3]/div[2]/div/table/tbody/tr[1]/td[3]/div[1]/text()").OuterHtml.ToString();
+                country = country.Replace(" ", "").Replace("\n", "");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> ParseCompanyCountry Error: {ex.Message}");
+            }
+
+            return country;
+        }
+
+        public (string industry, string sector) ParseCompanySector(string secId)
+        {
+            string industry = string.Empty;
+            string sector = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(secId)) throw new ArgumentNullException(nameof(secId));
+
+                var web = new HtmlWeb();
+                var doc = web.Load($"https://finrange.com/ru/company/MOEX/{secId}");
+
+                industry = doc.DocumentNode.SelectSingleNode($"/html/body/div[1]/div[1]/section/div/div[1]/div[1]/div/div[1]/div[2]/div[1]/span[1]").InnerText.ToString();
+                sector = doc.DocumentNode.SelectSingleNode($"/html/body/div[1]/div[1]/section/div/div[1]/div[1]/div/div[1]/div[2]/div[1]/span[2]").InnerText.ToString(); 
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"--> ParseCompanySector Error: {ex.Message}");
             }
 
-            return (sectorLongName, sectorShortName);
+            return (industry, sector);
         }
 
         public List<Multiplicator> ParseCompanyAllMultiplicators(Company company)

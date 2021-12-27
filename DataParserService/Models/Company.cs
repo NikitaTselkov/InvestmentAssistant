@@ -18,10 +18,13 @@ namespace DataParserService.Models
         public string Name { get; set; }
 
         [Required]
-        public string SectorLongName { get; set; }
+        public string Industry { get; set; }
 
         [Required]
-        public string SectorShortName { get; set; }
+        public string Sector { get; set; }
+
+        [Required]
+        public string Country { get; set; }
 
         [Required]
         public ICollection<Multiplicator> Multiplicators { get; set; }
@@ -37,12 +40,14 @@ namespace DataParserService.Models
 
         public Company(SecuritieTQBR securitieTQBR)
         {
-            var (sectorLongName, sectorShortName) = _parser.ParseCompanySector(securitieTQBR);
+            var secId = securitieTQBR.SECID;
+            var (industry, sector) = _parser.ParseCompanySector(secId);
 
-            Name = _parser.ParseCompanyName(securitieTQBR);
+            Name = _parser.ParseCompanyName(secId);
             SecuritieTQBR = securitieTQBR;
-            SectorLongName = sectorLongName;
-            SectorShortName = sectorShortName;
+            Industry = industry;
+            Sector = sector;
+            Country = _parser.ParseCompanyCountry(secId);
             Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
         }
     }

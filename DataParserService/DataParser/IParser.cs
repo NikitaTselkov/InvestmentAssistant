@@ -10,7 +10,8 @@ namespace DataParserService.DataParser
     {
         List<Multiplicator> ParseCompanyAllMultiplicators(Company company);
         Multiplicator ParseCompanyMultiplicator(Company company, string multiplicatorName);
-        string ParseCompanyName(SecuritieTQBR securitieTQBR);
-        (string sectorLongName, string sectorShortName) ParseCompanySector(SecuritieTQBR securitieTQBR);
+        string ParseCompanyName(string secId);
+        string ParseCompanyCountry(string secId);
+        (string industry, string sector) ParseCompanySector(string secId);
     }
 }

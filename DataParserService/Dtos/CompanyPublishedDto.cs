@@ -8,8 +8,9 @@ namespace DataParserService.Dtos
     public class CompanyPublishedDto : AbstractPublisedhDto
     {
         public string Name { get; set; }
-        public string SectorLongName { get; set; }
-        public string SectorShortName { get; set; }
+        public string Industry { get; set; }
+        public string Sector { get; set; }
+        public string Country { get; set; }
         public string SecId { get; set; }
     }
 }

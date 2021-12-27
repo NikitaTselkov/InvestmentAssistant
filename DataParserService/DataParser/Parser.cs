@@ -25,7 +25,7 @@ namespace DataParserService.DataParser
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> ParseCompanyName Error: {ex.Message}");
+                Console.WriteLine($"--> {secId} ParseCompanyName Error: {ex.Message}");
             }
 
             return name;
@@ -42,12 +42,18 @@ namespace DataParserService.DataParser
                 var web = new HtmlWeb();
                 var doc = web.Load($"https://finrange.com/ru/company/MOEX?search={secId}");
 
-                country = doc.DocumentNode.SelectSingleNode($"//div[@class='content-wrapper']/div/div[3]/div[2]/div/table/tbody/tr[1]/td[3]/div[1]/text()").OuterHtml.ToString();
-                country = country.Replace(" ", "").Replace("\n", "");
+                foreach (var node in doc.DocumentNode.SelectNodes($"//div[@class='content-wrapper']/div/div[3]/div[2]/div/table/tbody"))
+                {
+                    if (node.SelectSingleNode("//span[@class='small-logo__ticker-company']").InnerText.ToString() == secId)
+                    { 
+                        country = node.SelectSingleNode($"//td[3]/div[1]").InnerText.ToString();
+                        country = country.Replace(" ", "").Replace("\n", "");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> ParseCompanyCountry Error: {ex.Message}");
+                Console.WriteLine($"--> {secId} ParseCompanyCountry Error: {ex.Message}");
             }
 
             return country;
@@ -70,7 +76,7 @@ namespace DataParserService.DataParser
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"--> ParseCompanySector Error: {ex.Message}");
+                Console.WriteLine($"--> {secId} ParseCompanySector Error: {ex.Message}");
             }
 
             return (industry, sector);

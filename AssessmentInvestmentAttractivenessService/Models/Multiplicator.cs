@@ -16,13 +16,13 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public string MultiplicatorName { get; set; }
 
         [Required]
-        public string GroupOfMultiplicators { get; set; }
+        public GroupOfMultiplicators GroupOfMultiplicators { get; set; }
 
         [Required]
         public string Description { get; set; }
         
         [Required]
-        public List<string> DoesNotWorkWithCompanies { get; set; }
+        public ICollection<FieldOfActivityOfCompany> DoesNotWorkWithCompanies { get; set; }
         
         [Required]
         public bool IfNeedToConsiderTheDynamics { get; set; }

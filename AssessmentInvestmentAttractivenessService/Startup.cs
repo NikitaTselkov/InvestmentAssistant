@@ -1,6 +1,8 @@
+using AssessmentInvestmentAttractivenessService.DataBase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +26,9 @@ namespace AssessmentInvestmentAttractivenessService
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Console.WriteLine("--> Using SqlServer DB");
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("SQlAssessmentInvestmentAttractivenessConnection")));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -49,6 +54,8 @@ namespace AssessmentInvestmentAttractivenessService
             {
                 endpoints.MapControllers();
             });
+
+            PrebDb.InitDataBase(app);
         }
     }
 }

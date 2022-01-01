@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,20 +18,32 @@ namespace AssessmentInvestmentAttractivenessService
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+
+            builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+            builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
+            builder.AddJsonFile(@"Configs\DescriptionsForMultiplicators.json", optional: true, reloadOnChange: true);
+            builder.AddJsonFile(@"Configs\GroupsOfMultiplicators.json", optional: true, reloadOnChange: true);
+            builder.AddJsonFile(@"Configs\FieldsOfActivityOfCompany.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.AddEnvironmentVariables().Build();
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Configuration);
+
             Console.WriteLine("--> Using SqlServer DB");
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SQlAssessmentInvestmentAttractivenessConnection")));
 
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AssessmentInvestmentAttractivenessService", Version = "v1" });

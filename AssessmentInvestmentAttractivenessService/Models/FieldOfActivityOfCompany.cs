@@ -13,6 +13,9 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public int Id { get; set; }
 
         [Required]
+        public string FieldOfActivityCode { get; set; }
+        
+        [Required]
         public string FieldOfActivityName { get; set; }
     }
 }

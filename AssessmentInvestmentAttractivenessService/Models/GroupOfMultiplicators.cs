@@ -13,6 +13,9 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public int Id { get; set; }
 
         [Required]
+        public string GroupCode { get; set; }
+
+        [Required]
         public string GroupName { get; set; }
     }
 }

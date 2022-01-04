@@ -29,6 +29,8 @@ namespace DataParserService.DataBase
         }
         private static void InitCompanies()
         {
+            Company company = null;
+
             foreach (var securitieTQBR in _repository.GetSecuritiesTQBR().Where(w => w.SECTYPE == SecuritiesTQBRCodes.Stock))
             {
                 if (!_repository.IsCompanyExists(securitieTQBR))
@@ -37,7 +39,15 @@ namespace DataParserService.DataBase
                 }
                 else
                 {
-                    Console.WriteLine($"--> Company {_repository.GetCompanyBySecId(securitieTQBR.SECID).Name} already exists");
+                    company = _repository.GetCompanyBySecId(securitieTQBR.SECID);
+                    Console.WriteLine($"--> Company {company.Name} already exists");
+                }
+
+                if (company != null && _repository.IsUpdateMultiplicatorsForCompany(company.Id))
+                {
+                    _repository.UpdateMultiplicatorsForCompany(company.Id);
+                    Console.WriteLine($"--> Multiplicators were updated for company {company.Name}");
+                    company = null;
                 }
             }
 

@@ -21,6 +21,7 @@ namespace DataParserService.DataBase
         Company GetCompanyBySecId(string secId);
         Company GetCompanyById(int id);
         void AddCompany(Company company);
+        bool IsUpdateMultiplicatorsForCompany(int companyId);
         bool IsCompanyExists(SecuritieTQBR securitieTQBR);
 
         // Securities TQBR.

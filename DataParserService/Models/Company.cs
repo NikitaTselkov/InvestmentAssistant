@@ -27,6 +27,9 @@ namespace DataParserService.Models
         public string Country { get; set; }
 
         [Required]
+        public DateTime LastMultiplicatorsUpdate { get; set; }
+
+        [Required]
         public ICollection<Multiplicator> Multiplicators { get; set; }
 
         [Required]
@@ -48,6 +51,7 @@ namespace DataParserService.Models
             Industry = industry;
             Sector = sector;
             Country = _parser.ParseCompanyCountry(secId);
+            LastMultiplicatorsUpdate = DateTime.Now;
             Multiplicators = _parser.ParseCompanyAllMultiplicators(this);
         }
     }

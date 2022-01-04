@@ -43,6 +43,11 @@ namespace DataParserService.DataBase
             }
         }
 
+        public bool IsUpdateMultiplicatorsForCompany(int companyId)
+        {
+            return !_context.Multiplicators.Any() || _context.Companies.FirstOrDefault(f => f.Id == companyId)?.LastMultiplicatorsUpdate.Day != DateTime.Now.Day;
+        }
+
         public bool IsCompanyExists(SecuritieTQBR securitieTQBR)
         {
             return _context.Companies.FirstOrDefault(f => f.SecuritieTQBR == securitieTQBR) != null;

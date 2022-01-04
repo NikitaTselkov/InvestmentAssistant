@@ -36,6 +36,23 @@ namespace AssessmentInvestmentAttractivenessService.DataBase
                .HasForeignKey(c => c.CompanyId);
 
             modelBuilder
+              .Entity<Multiplicator>()
+              .HasOne(c => c.Description)
+              .WithMany(c => c.Multiplicators)
+              .HasForeignKey(c => c.DescriptionId);
+
+            modelBuilder
+              .Entity<Multiplicator>()
+              .HasOne(c => c.GroupOfMultiplicators)
+              .WithMany(c => c.Multiplicators)
+              .HasForeignKey(c => c.GroupOfMultiplicatorsId);
+
+            modelBuilder
+                .Entity<Multiplicator>()
+                .HasMany(c => c.DoesNotWorkWithCompanies)
+                .WithMany(c => c.Multiplicators);
+
+            modelBuilder
               .Entity<Models.Index>()
               .HasOne(c => c.Multiplicator)
               .WithMany(c => c.Indexes)

@@ -13,26 +13,23 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public int Id { get; set; }
 
         [Required]
-        public string MultiplicatorName { get; set; }
-
-        [Required]
-        public GroupOfMultiplicators GroupOfMultiplicators { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-        
-        [Required]
-        public ICollection<FieldOfActivityOfCompany> DoesNotWorkWithCompanies { get; set; }
-        
-        [Required]
         public bool IfNeedToConsiderTheDynamics { get; set; }
 
         [Required]
         public ICollection<Index> Indexes { get; set; }
 
+        public ICollection<FieldOfActivityOfCompany> DoesNotWorkWithCompanies { get; set; }
+
+        [Required]
+        public int GroupOfMultiplicatorsId { get; set; }
+        public GroupOfMultiplicators GroupOfMultiplicators { get; set; }
+
+        [Required]
+        public int DescriptionId { get; set; }
+        public DescriptionForMultiplicators Description { get; set; }
+
         [Required]
         public int CompanyId { get; set; }
-
         public Company Company { get; set; }
     }
 }

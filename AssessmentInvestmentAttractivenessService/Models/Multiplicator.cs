@@ -13,9 +13,6 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public int Id { get; set; }
 
         [Required]
-        public bool IfNeedToConsiderTheDynamics { get; set; }
-
-        [Required]
         public ICollection<Index> Indexes { get; set; }
 
         public ICollection<FieldOfActivityOfCompany> DoesNotWorkWithCompanies { get; set; }

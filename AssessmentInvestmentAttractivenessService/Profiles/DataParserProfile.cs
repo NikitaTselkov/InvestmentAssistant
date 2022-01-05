@@ -15,18 +15,19 @@ namespace AssessmentInvestmentAttractivenessService.Profiles
             //Source -> Target
             CreateMap<DbListNodeDto, DescriptionForMultiplicators>()
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Key))
-                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Value));
+                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Values[0]))
+                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Values[1]))
+                 .ForMember(dest => dest.HowToInterpret, opt => opt.MapFrom(src => src.Values[2]));
 
             CreateMap<DbListNodeDto, GroupOfMultiplicators>()
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                 .ForMember(dest => dest.GroupCode, opt => opt.MapFrom(src => src.Key))
-                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(src => src.Value));
-            
+                 .ForMember(dest => dest.GroupCode, opt => opt.MapFrom(src => src.Values[0]))
+                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(src => src.Values[1]));
+
             CreateMap<DbListNodeDto, FieldOfActivityOfCompany>()
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                 .ForMember(dest => dest.FieldOfActivityCode, opt => opt.MapFrom(src => src.Key))
-                 .ForMember(dest => dest.FieldOfActivityName, opt => opt.MapFrom(src => src.Value));
+                 .ForMember(dest => dest.FieldOfActivityCode, opt => opt.MapFrom(src => src.Values[0]))
+                 .ForMember(dest => dest.FieldOfActivityName, opt => opt.MapFrom(src => src.Values[1]));
         }
     }
 }

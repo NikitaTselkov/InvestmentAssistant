@@ -74,16 +74,28 @@ namespace AssessmentInvestmentAttractivenessService.DataBase
 
             try
             {
-                var valuesSection = _settings.GetSection(sectionKey);
+                var metadata = _settings.GetSection($"{sectionKey}:metadata").Get<string[]>();
+                var valuesSection = _settings.GetSection($"{sectionKey}:data");
                 var i = 0;
+
+                var length = metadata.Length;            
+
                 foreach (IConfigurationSection section in valuesSection.GetChildren())
                 {
-                    result.Add(new DbListNodeDto
+                    var iterator = 0;
+                    var listNode = new DbListNodeDto() { Id = ++i };
+
+                    listNode.Keys = new string[length];
+                    listNode.Values = new string[length];
+
+                    foreach (var key in metadata)
                     {
-                        Id = ++i,
-                        Key = section.GetValue<string>("Key"),
-                        Value = section.GetValue<string>("Value")
-                    });;
+                        listNode.Keys[iterator] = key;
+                        listNode.Values[iterator] = section.GetValue<string>(key);
+                        iterator++;
+                    }
+
+                    result.Add(listNode);
                 }
 
                 if (result.Count == 0) throw new ArgumentNullException();

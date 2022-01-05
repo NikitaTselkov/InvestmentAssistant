@@ -8,7 +8,7 @@ namespace AssessmentInvestmentAttractivenessService.Dtos
     public class DbListNodeDto
     {
         public int Id { get; set; }
-        public string Key { get; set; }
-        public string Value { get; set; }
+        public string[] Keys { get; set; }
+        public string[] Values { get; set; }
     }
 }

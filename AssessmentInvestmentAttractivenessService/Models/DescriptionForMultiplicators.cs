@@ -19,6 +19,9 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public string Description { get; set; }
 
         [Required]
+        public string HowToInterpret { get; set; }
+
+        [Required]
         public ICollection<Multiplicator> Multiplicators { get; set; }
     }
 }

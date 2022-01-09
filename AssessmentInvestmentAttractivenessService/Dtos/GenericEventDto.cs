@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataParserService.Dtos
+namespace AssessmentInvestmentAttractivenessService.Dtos
 {
-    public abstract class AbstractPublishDto
+    public class GenericEventDto
     {
         public string Event { get; set; }
     }

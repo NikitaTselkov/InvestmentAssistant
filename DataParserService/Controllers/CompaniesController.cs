@@ -74,16 +74,6 @@ namespace DataParserService.Controllers
             _repository.AddCompany(company);
 
             companyReadDto.Id = company.Id;
-            try
-            {
-                var companyPublishedDto = _mapper.Map<CompanyPublishedDto>(companyReadDto);
-                companyPublishedDto.Event = "CompanyPublished";
-                _messageBusClient.Publish(companyPublishedDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"--> Could not send asynchronously: {ex.Message}");
-            }
 
             return CreatedAtRoute(nameof(GetCompanyById), new { id = companyReadDto.Id }, companyReadDto);
         }

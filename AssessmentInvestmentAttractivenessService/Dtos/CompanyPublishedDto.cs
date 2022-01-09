@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataParserService.Dtos
+namespace AssessmentInvestmentAttractivenessService.Dtos
 {
-    public class CompanyPublishedDto : AbstractPublishDto
+    public class CompanyPublishedDto : AbstractPublishedDto
     {
         public string Name { get; set; }
         public string Industry { get; set; }

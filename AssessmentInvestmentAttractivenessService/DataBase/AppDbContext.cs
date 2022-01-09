@@ -30,10 +30,10 @@ namespace AssessmentInvestmentAttractivenessService.DataBase
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder
-               .Entity<Multiplicator>()
-               .HasOne(c => c.Company)
-               .WithMany(c => c.Multiplicators)
-               .HasForeignKey(c => c.CompanyId);
+              .Entity<Multiplicator>()
+              .HasOne(c => c.Company)
+              .WithMany(c => c.Multiplicators)
+              .HasForeignKey(c => c.CompanyId);
 
             modelBuilder
               .Entity<Multiplicator>()
@@ -43,20 +43,20 @@ namespace AssessmentInvestmentAttractivenessService.DataBase
 
             modelBuilder
               .Entity<Multiplicator>()
-              .HasOne(c => c.GroupOfMultiplicators)
-              .WithMany(c => c.Multiplicators)
-              .HasForeignKey(c => c.GroupOfMultiplicatorsId);
-
-            modelBuilder
-                .Entity<Multiplicator>()
-                .HasMany(c => c.DoesNotWorkWithCompanies)
-                .WithMany(c => c.Multiplicators);
+              .HasMany(c => c.DoesNotWorkWithCompanies)
+              .WithMany(c => c.Multiplicators);
 
             modelBuilder
               .Entity<Models.Index>()
               .HasOne(c => c.Multiplicator)
               .WithMany(c => c.Indexes)
               .HasForeignKey(c => c.MultiplicatorId);
+
+            modelBuilder
+              .Entity<DescriptionForMultiplicators>()
+              .HasOne(c => c.GroupOfMultiplicators)
+              .WithMany(c => c.DescriptionsForMultiplicators)
+              .HasForeignKey(c => c.CodeOfGroupOfMultiplicator);
 
             var descriptionsForMultiplicators = _mapper.Map<List<DescriptionForMultiplicators>>(GetListFromConfig("DescriptionsForMultiplicators"));
             modelBuilder.Entity<DescriptionForMultiplicators>().HasData(descriptionsForMultiplicators);

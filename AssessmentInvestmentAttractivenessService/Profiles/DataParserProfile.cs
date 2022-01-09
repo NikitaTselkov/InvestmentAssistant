@@ -17,10 +17,10 @@ namespace AssessmentInvestmentAttractivenessService.Profiles
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                  .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Values[0]))
                  .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Values[1]))
-                 .ForMember(dest => dest.HowToInterpret, opt => opt.MapFrom(src => src.Values[2]));
+                 .ForMember(dest => dest.HowToInterpret, opt => opt.MapFrom(src => src.Values[2]))
+                 .ForMember(dest => dest.CodeOfGroupOfMultiplicator, opt => opt.MapFrom(src => src.Values[3]));
 
             CreateMap<DbListNodeDto, GroupOfMultiplicators>()
-                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                  .ForMember(dest => dest.GroupCode, opt => opt.MapFrom(src => src.Values[0]))
                  .ForMember(dest => dest.GroupName, opt => opt.MapFrom(src => src.Values[1]));
 
@@ -28,6 +28,9 @@ namespace AssessmentInvestmentAttractivenessService.Profiles
                  .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                  .ForMember(dest => dest.FieldOfActivityCode, opt => opt.MapFrom(src => src.Values[0]))
                  .ForMember(dest => dest.FieldOfActivityName, opt => opt.MapFrom(src => src.Values[1]));
+
+            CreateMap<CompanyPublishedDto, Company>();
+            CreateMap<MultiplicatorPublishedDto, Multiplicator>();
         }
     }
 }

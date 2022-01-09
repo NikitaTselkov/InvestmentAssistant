@@ -8,6 +8,6 @@ namespace DataParserService.RabbitMQ
 {
     public interface IMessageBusClient
     {
-        void Publish(AbstractPublisedhDto publishedDto);
+        void Publish<T>(T publishedDto) where T : AbstractPublishDto;
     }
 }

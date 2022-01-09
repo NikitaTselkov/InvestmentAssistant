@@ -20,6 +20,11 @@ namespace AssessmentInvestmentAttractivenessService.Models
 
         [Required]
         public string HowToInterpret { get; set; }
+        
+        [Required]
+        public string CodeOfGroupOfMultiplicator { get; set; }
+        
+        public GroupOfMultiplicators GroupOfMultiplicators { get; set; }
 
         [Required]
         public ICollection<Multiplicator> Multiplicators { get; set; }

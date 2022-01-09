@@ -29,9 +29,7 @@ namespace DataParserService.RabbitMQ
             {
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
-
                 _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
-
                 _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
 
                 Console.WriteLine("--> Connected to MessageBus");
@@ -42,7 +40,7 @@ namespace DataParserService.RabbitMQ
             }
         }
 
-        public void Publish(AbstractPublisedhDto publishedDto)
+        public void Publish<T>(T publishedDto) where T : AbstractPublishDto
         {
             var message = JsonSerializer.Serialize(publishedDto);
 
@@ -63,7 +61,7 @@ namespace DataParserService.RabbitMQ
 
             _channel.BasicPublish(exchange: "trigger", routingKey: "", basicProperties: null, body: body);
 
-            Console.WriteLine($"--> We have sent {message}");
+            Console.WriteLine("--> We have sent message");
         }
 
         public void Dispose()

@@ -1,55 +1,65 @@
 ﻿{
 	"DescriptionsForMultiplicators": {
 		"metadata": [
-				"Name",
-				"Description",
-			  "HowToInterpret"
+			"Name",
+			"Description",
+			"HowToInterpret",
+			"CodeOfGroupOfMultiplicator"
 		],
 		"data": [
 			{
 				"Name": "P/E",
 				"Description": "Показывает, сколько лет должна проработать компания, получая ту же прибыль, чтобы окупить акционерный капитал.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "REVEM"
 			},
 			{
 				"Name": "P/S",
 				"Description": "Показывает, сколько вы платите за 1 рубль выручки компании.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "REVEM"
 			},
 			{
 				"Name": "P/B",
 				"Description": "Показывает, сколько денег можно выручить за компанию, если продать все ее имущество.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "REVEM"
 			},
 			{
 				"Name": "P/BV",
 				"Description": "Позволяет оценить, переплачивает ли инвестор за остаток, который ему достанется, если компания обанкротится.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "BALANM"
 			},
 			{
 				"Name": "D/E",
 				"Description": "Показывает, сколько заёмных средств приходится на каждый рубль собственного капитала.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "FSSM"
 			},
 			{
-				"Name": "EV/EBIDA",
+				"Name": "EV/EBITDA",
 				"Description": "Показывает, сколько прибылей до уплаты процентов, налогов и амортизации должна заработать компания, чтобы окупить реальную рыночную цену компании.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "REVEM"
 			},
 			{
-				"Name": "DEBT/EBIDA",
+				"Name": "DEBT/EBITDA",
 				"Description": "Сообщает о достаточности или нехватке ресурсов для погашения займов и процентных ставок по ним.",
-				"HowToInterpret": "Чем меньше, тем лучше"
+				"HowToInterpret": "Чем меньше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "FSSM"
 			},
 			{
 				"Name": "ROE",
 				"Description": "Показывает, как компания генерирует чистую прибыль за счёт собственных средств, по которым компания не выплачивает проценты.",
-				"HowToInterpret": "Чем больше, тем лучше"
+				"HowToInterpret": "Чем больше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "PROFIM"
 			},
 			{
 				"Name": "ROA",
 				"Description": "Показывает, как компания использует все активы, в том числе и заёмные, для получения прибыли.",
-				"HowToInterpret": "Чем больше, тем лучше"
+				"HowToInterpret": "Чем больше, тем лучше",
+				"CodeOfGroupOfMultiplicator": "PROFIM"
 			}
 		]
 	}

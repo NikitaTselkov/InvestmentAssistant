@@ -1,4 +1,6 @@
 using AssessmentInvestmentAttractivenessService.DataBase;
+using AssessmentInvestmentAttractivenessService.EventProcessing;
+using AssessmentInvestmentAttractivenessService.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +20,23 @@ namespace AssessmentInvestmentAttractivenessService
 {
     public class Startup
     {
-        public Startup()
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
 
             builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
-            builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
             builder.AddJsonFile(@"Configs\DescriptionsForMultiplicators.json", optional: true, reloadOnChange: true);
             builder.AddJsonFile(@"Configs\GroupsOfMultiplicators.json", optional: true, reloadOnChange: true);
             builder.AddJsonFile(@"Configs\FieldsOfActivityOfCompany.json", optional: true, reloadOnChange: true);
+
+            if (env.IsProduction())
+            {
+                builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
+            }
+            else if (env.IsDevelopment())
+            {
+                builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
+            }
 
             Configuration = builder.AddEnvironmentVariables().Build();
         }
@@ -42,7 +51,12 @@ namespace AssessmentInvestmentAttractivenessService
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SQlAssessmentInvestmentAttractivenessConnection")));
 
+            services.AddScoped<IRepository, Repository>();
             services.AddControllers();
+
+            services.AddHostedService<MessageBusSubscriber>();
+
+            services.AddSingleton<IEventProcessor, EventProcessor>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddSwaggerGen(c =>
             {
@@ -69,6 +83,8 @@ namespace AssessmentInvestmentAttractivenessService
             });
 
             PrebDb.InitDataBase(app);
+
+            Console.ReadKey();
         }
     }
 }

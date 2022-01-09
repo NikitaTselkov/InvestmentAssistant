@@ -3,14 +3,16 @@ using AssessmentInvestmentAttractivenessService.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AssessmentInvestmentAttractivenessService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220109100414_Added_CodeOfGroupOfMultiplicator_To_DescriptionsForMultiplicators")]
+    partial class Added_CodeOfGroupOfMultiplicator_To_DescriptionsForMultiplicators
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +61,7 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
 
                     b.Property<string>("CodeOfGroupOfMultiplicator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -74,8 +76,6 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CodeOfGroupOfMultiplicator");
 
                     b.ToTable("DescriptionsForMultiplicators");
 
@@ -244,35 +244,45 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
 
             modelBuilder.Entity("AssessmentInvestmentAttractivenessService.Models.GroupOfMultiplicators", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("GroupCode")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GroupCode");
+                    b.HasKey("Id");
 
                     b.ToTable("GroupsOfMultiplicators");
 
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             GroupCode = "REVEM",
                             GroupName = "Доходный мультипликатор"
                         },
                         new
                         {
+                            Id = 2,
                             GroupCode = "BALANM",
                             GroupName = "Балансовый мультипликатор"
                         },
                         new
                         {
+                            Id = 3,
                             GroupCode = "PROFIM",
                             GroupName = "Мультипликатор рентабельности"
                         },
                         new
                         {
+                            Id = 4,
                             GroupCode = "FSSM",
                             GroupName = "Мультипликатор финансовой устойчивости и платёжеспособности"
                         });
@@ -315,11 +325,16 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
                     b.Property<int>("DescriptionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("GroupOfMultiplicatorsId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
                     b.HasIndex("DescriptionId");
+
+                    b.HasIndex("GroupOfMultiplicatorsId");
 
                     b.ToTable("Multiplicators");
                 });
@@ -337,17 +352,6 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
                     b.HasIndex("MultiplicatorsId");
 
                     b.ToTable("FieldOfActivityOfCompanyMultiplicator");
-                });
-
-            modelBuilder.Entity("AssessmentInvestmentAttractivenessService.Models.DescriptionForMultiplicators", b =>
-                {
-                    b.HasOne("AssessmentInvestmentAttractivenessService.Models.GroupOfMultiplicators", "GroupOfMultiplicators")
-                        .WithMany("DescriptionsForMultiplicators")
-                        .HasForeignKey("CodeOfGroupOfMultiplicator")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GroupOfMultiplicators");
                 });
 
             modelBuilder.Entity("AssessmentInvestmentAttractivenessService.Models.Index", b =>
@@ -375,9 +379,17 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("AssessmentInvestmentAttractivenessService.Models.GroupOfMultiplicators", "GroupOfMultiplicators")
+                        .WithMany("Multiplicators")
+                        .HasForeignKey("GroupOfMultiplicatorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("Description");
+
+                    b.Navigation("GroupOfMultiplicators");
                 });
 
             modelBuilder.Entity("FieldOfActivityOfCompanyMultiplicator", b =>
@@ -407,7 +419,7 @@ namespace AssessmentInvestmentAttractivenessService.Migrations
 
             modelBuilder.Entity("AssessmentInvestmentAttractivenessService.Models.GroupOfMultiplicators", b =>
                 {
-                    b.Navigation("DescriptionsForMultiplicators");
+                    b.Navigation("Multiplicators");
                 });
 
             modelBuilder.Entity("AssessmentInvestmentAttractivenessService.Models.Multiplicator", b =>

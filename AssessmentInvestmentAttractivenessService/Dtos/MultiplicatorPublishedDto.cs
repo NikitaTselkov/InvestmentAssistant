@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataParserService.Dtos
+namespace AssessmentInvestmentAttractivenessService.Dtos
 {
-    public class MultiplicatorPublishedDto : AbstractPublishDto
+    public class MultiplicatorPublishedDto : AbstractPublishedDto
     {
         public string Name { get; set; }
         public ICollection<string> IndexKey { get; set; }

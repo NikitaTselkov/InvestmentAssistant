@@ -18,10 +18,6 @@ namespace AssessmentInvestmentAttractivenessService.Models
         public ICollection<FieldOfActivityOfCompany> DoesNotWorkWithCompanies { get; set; }
 
         [Required]
-        public int GroupOfMultiplicatorsId { get; set; }
-        public GroupOfMultiplicators GroupOfMultiplicators { get; set; }
-
-        [Required]
         public int DescriptionId { get; set; }
         public DescriptionForMultiplicators Description { get; set; }
 

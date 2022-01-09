@@ -1,5 +1,8 @@
-﻿using DataParserService.DataParser;
+﻿using AutoMapper;
+using DataParserService.DataParser;
+using DataParserService.Dtos;
 using DataParserService.Models;
+using DataParserService.RabbitMQ;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -14,10 +17,14 @@ namespace DataParserService.DataBase
     {
         private readonly AppDbContext _context;
         private readonly IParser _parser;
+        private readonly IMessageBusClient _messageBusClient;
+        private readonly IMapper _mapper;
 
-        public Repository(AppDbContext context)
+        public Repository(AppDbContext context, IMessageBusClient messageBusClient, IMapper mapper)
         {
             _context = context;
+            _messageBusClient = messageBusClient;
+            _mapper = mapper;
             _parser = new Parser();
         }
 
@@ -36,6 +43,17 @@ namespace DataParserService.DataBase
                 _context.SaveChanges();
 
                 Console.WriteLine($"--> Added company: {company.Name}");
+
+                try
+                {
+                    var companyPublishedDto = _mapper.Map<CompanyPublishedDto>(company);
+                    companyPublishedDto.Event = "Company_Published";
+                    _messageBusClient.Publish(companyPublishedDto);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"--> Could not send asynchronously: {ex.Message}");
+                }
             }
             else
             {
@@ -100,6 +118,18 @@ namespace DataParserService.DataBase
 
             var company = _context.Companies.FirstOrDefault(f => f.Id == companyId);
             multiplicator.CompanyId = companyId;
+
+            try
+            {
+                var multiplicatorPublishedDto = _mapper.Map<MultiplicatorPublishedDto>(multiplicator);
+                multiplicatorPublishedDto.SecId = GetCompanyById(companyId)?.SecuritieTQBR?.SECID;
+                multiplicatorPublishedDto.Event = "Multiplicators_Published";
+                _messageBusClient.Publish(multiplicatorPublishedDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send asynchronously: {ex.Message}");
+            }
 
             _context.Indexes.AddRange(multiplicator.Indexes);
             _context.Multiplicators.Add(multiplicator);

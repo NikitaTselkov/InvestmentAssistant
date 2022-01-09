@@ -1,6 +1,8 @@
-﻿using DataParserService.Codes;
+﻿using AutoMapper;
+using DataParserService.Codes;
 using DataParserService.DataParser;
 using DataParserService.Models;
+using DataParserService.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +18,16 @@ namespace DataParserService.DataBase
         public static void InitDataBase(IApplicationBuilder app)
         {
             AppDbContext appDbContext;
+            IMessageBusClient messageBusClient;
+            IMapper mapper;
 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
+                messageBusClient = serviceScope.ServiceProvider.GetService<IMessageBusClient>();
+                mapper = serviceScope.ServiceProvider.GetService<IMapper>();
                 appDbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
-                _repository = new Repository(appDbContext);
+
+                _repository = new Repository(appDbContext, messageBusClient, mapper);
 
                 ApplyMigrate(appDbContext);
                 InitSecurities();
@@ -35,7 +42,9 @@ namespace DataParserService.DataBase
             {
                 if (!_repository.IsCompanyExists(securitieTQBR))
                 {
-                    _repository.AddCompany(new Company(securitieTQBR));
+                    company = new Company(securitieTQBR);
+                    _repository.AddCompany(company);
+                    _repository.UpdateMultiplicatorsForCompany(company.Id);
                 }
                 else
                 {

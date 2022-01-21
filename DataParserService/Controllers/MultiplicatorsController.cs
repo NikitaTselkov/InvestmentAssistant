@@ -44,7 +44,6 @@ namespace DataParserService.Controllers
             }
 
             _repository.AddMultiplicatorForCompany(companyId, multiplicatorModel);
-            _repository.SaveChanges();
 
             var multiplicators = _mapper.Map<List<MultiplicatorReadDto>>(_repository.GetMultiplicatorsForCompany(companyId));
 

@@ -4,9 +4,12 @@ using DataParserService.Dtos;
 using DataParserService.Models;
 using DataParserService.RabbitMQ;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace DataParserService.Controllers
 {

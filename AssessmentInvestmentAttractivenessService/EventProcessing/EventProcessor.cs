@@ -39,7 +39,7 @@ namespace AssessmentInvestmentAttractivenessService.EventProcessing
                     AddCompany(message);
                     break;
                 case EventType.MultiplicatorsPublished:
-                    AddMultiplicators(message);
+                    AddMultiplicator(message);
                     break;
                 case EventType.Undetermined:
                     break;
@@ -93,7 +93,7 @@ namespace AssessmentInvestmentAttractivenessService.EventProcessing
             }
         }
 
-        private void AddMultiplicators(string publishedMessage)
+        private void AddMultiplicator(string publishedMessage)
         {
             using (var scope = _scopeFactory.CreateScope())
             {

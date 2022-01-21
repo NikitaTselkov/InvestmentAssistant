@@ -12,6 +12,7 @@ spec:
       labels:
         app: dataparserservice
     spec:
+      hostNetwork: true
       containers:
         - name: dataparserservice
           image: nikitatcelkov/dataparserservice:latest

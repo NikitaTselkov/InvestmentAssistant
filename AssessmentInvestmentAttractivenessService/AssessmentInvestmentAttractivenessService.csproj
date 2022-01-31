@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Content Remove="Configs\DescriptionsForMultiplicators.config" />
-    <Content Remove="Configs\DescriptionsForMultiplicators.json" />
     <Content Remove="Configs\FieldsOfActivityOfCompany.json" />
     <Content Remove="Configs\GroupsOfMultiplicators.json" />
   </ItemGroup>

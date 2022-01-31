@@ -76,8 +76,7 @@ namespace AssessmentInvestmentAttractivenessService.DataBase
             {
                 var metadata = _settings.GetSection($"{sectionKey}:metadata").Get<string[]>();
                 var valuesSection = _settings.GetSection($"{sectionKey}:data");
-                var i = 0;
-
+                var i = 0;        
                 var length = metadata.Length;            
 
                 foreach (IConfigurationSection section in valuesSection.GetChildren())

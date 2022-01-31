@@ -1,0 +1,31 @@
+﻿apiVersion: "apps/v1"
+kind: Deployment
+metadata:
+  name: assessmentinvestmentattractiveness-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aias
+  template:
+    metadata:
+      labels:
+        app: aias
+    spec:
+      containers:
+        - name: aias
+          image: nikitatcelkov/assessmentinvestmentattractivenessservice:latest
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aias-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: aias
+  ports:
+  - name: aias
+    protocol: TCP
+    port: 80
+    targetPort: 80

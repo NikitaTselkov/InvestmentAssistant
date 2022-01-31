@@ -25,16 +25,19 @@ namespace AssessmentInvestmentAttractivenessService
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
 
             builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            builder.AddJsonFile(@"Configs\DescriptionsForMultiplicators.json", optional: true, reloadOnChange: true);
-            builder.AddJsonFile(@"Configs\GroupsOfMultiplicators.json", optional: true, reloadOnChange: true);
-            builder.AddJsonFile(@"Configs\FieldsOfActivityOfCompany.json", optional: true, reloadOnChange: true);
 
             if (env.IsProduction())
             {
+                builder.AddJsonFile("DescriptionsForMultiplicators.json", optional: true, reloadOnChange: true);
+                builder.AddJsonFile("GroupsOfMultiplicators.json", optional: true, reloadOnChange: true);
+                builder.AddJsonFile("FieldsOfActivityOfCompany.json", optional: true, reloadOnChange: true);
                 builder.AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true);
             }
             else if (env.IsDevelopment())
             {
+                builder.AddJsonFile(@"Configs/DescriptionsForMultiplicators.json", optional: true, reloadOnChange: true);
+                builder.AddJsonFile(@"Configs/GroupsOfMultiplicators.json", optional: true, reloadOnChange: true);
+                builder.AddJsonFile(@"Configs/FieldsOfActivityOfCompany.json", optional: true, reloadOnChange: true);
                 builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
             }
 
@@ -83,8 +86,6 @@ namespace AssessmentInvestmentAttractivenessService
             });
 
             PrebDb.InitDataBase(app);
-
-            Console.ReadKey();
         }
     }
 }

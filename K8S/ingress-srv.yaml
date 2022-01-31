@@ -17,3 +17,10 @@ spec:
                 name: dataparser-clusterip-srv
                 port:
                   number: 80
+          - path: /api/aias
+            pathType: Prefix
+            backend:
+              service:
+                name: aias-clusterip-srv
+                port:
+                  number: 80

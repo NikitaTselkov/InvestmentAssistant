@@ -46,7 +46,6 @@ namespace DataParserService.RabbitMQ
 
             if (_connection.IsOpen)
             {
-                Console.WriteLine("--> RabbitMQ Connection Open, sending message...");
                 SendMessage(message);
             }
             else
@@ -60,8 +59,6 @@ namespace DataParserService.RabbitMQ
             var body = Encoding.UTF8.GetBytes(message);
 
             _channel.BasicPublish(exchange: "trigger", routingKey: "", basicProperties: null, body: body);
-
-            Console.WriteLine("--> We have sent message");
         }
 
         public void Dispose()
